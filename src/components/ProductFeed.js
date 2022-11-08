@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/outline";
 import Product from './Product'
-function ProductFeed( {products, }) {
-    console.log(products)
+function ProductFeed( {products }) {
   return (
     <div className="
     grid grid-flow-row-dense 

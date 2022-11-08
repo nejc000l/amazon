@@ -5,9 +5,10 @@ import {
   ShoppingCartIcon,
   Bars3Icon,
 } from "@heroicons/react/24/outline";
-
+import {signIn,signOut,useSession} from 'next-auth/client'
 
 function Header() {
+  const [session]= useSession()
   return (
     <header>
       <div className="flex items-center bg-amazon_blue p-1 flex-grow py-2">
@@ -18,6 +19,7 @@ function Header() {
             objectFit="contain"
             width={150}
             height={40}
+            alt='something'
           />
         </div>
         <div className=" hidden sm:flex rounded-md flex-grow cursor-pointer items-center h-10 hover:bg-yellow-500 bg-yellow-400">
@@ -28,8 +30,8 @@ function Header() {
           <MagnifyingGlassIcon className="h-12 p-4" />
         </div>
         <div className="text-white flex items-center text-xs mx-6 space-x-6 whitespace-nowrap">
-          <div className="link">
-            <p>Hello Nejc L</p>
+          <div  onClick={!session ? signIn: signOut} className="cursor-pointer link">
+            <p className="hover:underline">{session? `Hello ${session.user.name}`:'Sign In'}</p>
             <p className="font-extrabold md:text-sm ">Account & Lists</p>
           </div>
           <div className="link">
@@ -48,10 +50,10 @@ function Header() {
         </div>
       </div>
       <div className="flex items-center space-x-3 p-2 pl-6 bg-amazon_blue-light text-white text-sm">
-        <p className="link flex items-center">
+        <div className="link flex items-center">
           <Bars3Icon className="h-6 mr-1" />
           All
-        </p>
+        </div>
         <p className="link">Prime Video</p>
         <p className="link">Amazon Business</p>
         <p className="link">Today's Deals</p>
