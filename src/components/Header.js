@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import Image from "next/image";
 import {useRouter} from 'next/router'
 import {
@@ -10,10 +10,11 @@ import {signIn,signOut,useSession} from 'next-auth/client'
 import { useSelector } from "react-redux";
 import {selectItems} from '../slices/basketSlice'
 
-function Header() {
+function Header({products,search,setSearch}) {
   const [session]= useSession()
   const router = useRouter()
   const items = useSelector(selectItems)
+
   return (
     <header>
       <div className="flex items-center bg-amazon_blue p-1 flex-grow py-2">
@@ -30,6 +31,8 @@ function Header() {
         </div>
         <div className=" hidden sm:flex rounded-md flex-grow cursor-pointer items-center h-10 hover:bg-yellow-500 bg-yellow-400">
           <input
+            placeholder='Search...' 
+            onChange={(e)=>setSearch(e.target.value)}
             className="p-2 h-full w-6 flex-grow flex-shrink rounded-l-md focuse:outline-none px-4"
             type="text"
           />

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import { signIn, signOut, useSession } from "next-auth/client";
 import { useSelector } from "react-redux";
@@ -10,10 +10,11 @@ import {loadStripe} from '@stripe/stripe-js'
 import axios from 'axios'
 const stripePromise = loadStripe(process.env.stripe_public_key)
 
-function Checkout() {
+function Checkout({products}) {
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
   const [session] = useSession();
+  const [search,setSearch] = useState('')
   const crateCheckoutSession = async ()=>{
     const stripe = await stripePromise;
     // call the backend to create a checkout session 
@@ -32,7 +33,7 @@ function Checkout() {
   console.log(items);
   return (
     <div className="bg-gray-100">
-      <Header />
+      <Header setSearch={setSearch}/>
       <main className="lg:flex max-w-screen-2xl mx-auto">
         <div className="m-5 shadow-sm flex-grow">
           <Image
