@@ -6,10 +6,29 @@ import { useSelector } from "react-redux";
 import { selectItems,selectTotal } from "../slices/basketSlice";
 import CheckoutProduct from "../components/CheckoutProduct";
 import CurrencyFormat from "react-currency-format";
+import {loadStripe} from '@stripe/stripe-js'
+import axios from 'axios'
+const stripePromise = loadStripe(process.env.stripe_public_key)
+
 function Checkout() {
   const items = useSelector(selectItems);
   const total = useSelector(selectTotal);
   const [session] = useSession();
+  const crateCheckoutSession = async ()=>{
+    const stripe = await stripePromise;
+    // call the backend to create a checkout session 
+    const checkoutSession = await axios.post('/api/create-checkout-session',{
+      items:items,
+      email: session.user.email
+    })
+    // redirect user to stripe create
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id
+    })
+    if (result.error){
+      alert(result.error.message);
+    }
+  }
   console.log(items);
   return (
     <div className="bg-gray-100">
@@ -57,6 +76,8 @@ function Checkout() {
                 </span>
               </h2>
               <button
+                onClick={crateCheckoutSession}
+                role='link'
                 disabled={!session}
                 className={`button  mt-2 ${
                   !session &&
